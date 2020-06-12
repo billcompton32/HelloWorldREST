@@ -1,9 +1,18 @@
 pipeline {
-    agent { docker { image 'maven:3.3.3' } }
+    agent any
+    tools {
+        maven 'Maven 3.3.3'
+        jdk 'jdk8'
+    }
     stages {
-        stage('build') {
+        stage ('Build') {
             steps {
-                sh 'mvn --version'
+                sh 'mvn clean package'
+            }
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml' 
+                }
             }
         }
     }
